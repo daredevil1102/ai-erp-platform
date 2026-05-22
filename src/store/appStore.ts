@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-export type Module = 'dashboard' | 'marketing' | 'sales' | 'rfq' | 'dispatch' | 'finance' | 'hr' | 'agents' | 'automation' | 'settings'
+export type Module = 'dashboard' | 'marketing' | 'sales' | 'rfq' | 'dispatch' | 'finance' | 'agents' | 'automation' | 'settings'
 
 // Marketing Types
 export interface Lead {

@@ -8,7 +8,6 @@ import { Sales } from '@/components/sales/Sales'
 import { RFQ } from '@/components/rfq/RFQ'
 import { Dispatch } from '@/components/dispatch/Dispatch'
 import { Finance } from '@/components/finance/Finance'
-import { HR } from '@/components/hr/HR'
 import { Agents } from '@/components/agents/Agents'
 import { Settings } from '@/components/settings/Settings'
 import { EmailIntegration } from '@/components/automation/EmailIntegration'
@@ -24,7 +23,6 @@ export default function Home() {
       case 'rfq': return <RFQ />
       case 'dispatch': return <Dispatch />
       case 'finance': return <Finance />
-      case 'hr': return <HR />
       case 'automation': return <EmailIntegration />
       case 'agents': return <Agents />
       case 'settings': return <Settings />

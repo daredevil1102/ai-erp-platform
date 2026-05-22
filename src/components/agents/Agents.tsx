@@ -13,7 +13,6 @@ const agentModules = [
   { module: 'RFQ', count: 4, icon: Zap, agents: ['OCRProcessor', 'VendorMatcher', 'PriceComparator', 'QuoteGenerator'] },
   { module: 'Dispatch', count: 2, icon: Truck, agents: ['RouteOptimizer', 'DeliveryTracker'] },
   { module: 'Finance', count: 3, icon: Wallet, agents: ['InvoiceParser', 'PaymentTracker', 'CollectionAgent'] },
-  { module: 'HR', count: 1, icon: Users, agents: ['InterviewScheduler'] },
 ]
 
 const quickAgents = [
