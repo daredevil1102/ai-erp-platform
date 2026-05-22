@@ -1,6 +1,6 @@
 'use client'
-import { useState } from 'react'
-import { Target, Upload, Send, BarChart3, Users, Calendar, TrendingUp, Zap, X, Plus } from 'lucide-react'
+import { useState, useRef, DragEvent } from 'react'
+import { Target, Upload, Send, BarChart3, Users, Calendar, TrendingUp, Zap, X, Plus, FileText } from 'lucide-react'
 import { clsx } from 'clsx'
 
 type ModalType = 'create' | 'import' | 'viewLeads' | 'viewSequences' | null
@@ -10,9 +10,32 @@ export function Marketing() {
   const [activeModal, setActiveModal] = useState<ModalType>(null)
   const [campaignName, setCampaignName] = useState('')
   const [leadCount, setLeadCount] = useState(0)
+  const [uploadedFile, setUploadedFile] = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const openModal = (type: ModalType) => setActiveModal(type)
   const closeModal = () => setActiveModal(null)
+
+  const handleDragOver = (e: DragEvent) => {
+    e.preventDefault()
+    e.currentTarget.classList.add('border-accent/50')
+  }
+
+  const handleDragLeave = (e: DragEvent) => {
+    e.currentTarget.classList.remove('border-accent/50')
+  }
+
+  const handleDrop = (e: DragEvent) => {
+    e.preventDefault()
+    e.currentTarget.classList.remove('border-accent/50')
+    const file = e.dataTransfer.files[0]
+    if (file) setUploadedFile(file.name)
+  }
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) setUploadedFile(file.name)
+  }
 
   return (
     <div className="p-4 md:p-8 space-y-6 md:space-y-8 animate-fade-in">
@@ -114,16 +137,24 @@ export function Marketing() {
                       type="text" 
                       value={campaignName}
                       onChange={(e) => setCampaignName(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:border-accent outline-none" 
+                      className="w-full px-4 py-3 rounded-xl bg-surface border border-white/10 text-white focus:border-accent outline-none" 
                       placeholder="Enter campaign name" 
                     />
                   </div>
                   <div>
                     <label className="text-sm text-muted mb-1 block">Channel</label>
-                    <select className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:border-accent outline-none">
-                      <option value="email">Email</option>
-                      <option value="whatsapp">WhatsApp</option>
-                      <option value="sms">SMS</option>
+                    <select className="w-full px-4 py-3 rounded-xl bg-surface border border-white/10 text-white focus:border-accent outline-none appearance-none cursor-pointer">
+                      <option value="email" className="bg-surface">Email</option>
+                      <option value="whatsapp" className="bg-surface">WhatsApp</option>
+                      <option value="sms" className="bg-surface">SMS</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted mb-1 block">Priority</label>
+                    <select className="w-full px-4 py-3 rounded-xl bg-surface border border-white/10 text-white focus:border-accent outline-none appearance-none cursor-pointer">
+                      <option value="low" className="bg-surface">Low</option>
+                      <option value="normal" className="bg-surface">Normal</option>
+                      <option value="high" className="bg-surface">High</option>
                     </select>
                   </div>
                   <div>
@@ -132,7 +163,7 @@ export function Marketing() {
                       type="number" 
                       value={leadCount}
                       onChange={(e) => setLeadCount(Number(e.target.value))}
-                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:border-accent outline-none" 
+                      className="w-full px-4 py-3 rounded-xl bg-surface border border-white/10 text-white focus:border-accent outline-none" 
                       placeholder="0" 
                     />
                   </div>
@@ -146,14 +177,36 @@ export function Marketing() {
               )}
               {activeModal === 'import' && (
                 <>
-                  <div className="border-2 border-dashed border-white/20 rounded-xl p-8 text-center hover:border-accent/50 transition-colors cursor-pointer">
+                  <input 
+                    type="file" 
+                    ref={fileInputRef}
+                    onChange={handleFileSelect}
+                    className="hidden"
+                    accept=".csv"
+                  />
+                  <div 
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDrop}
+                    onClick={() => fileInputRef.current?.click()}
+                    className="border-2 border-dashed border-white/20 rounded-xl p-8 text-center hover:border-accent/50 transition-colors cursor-pointer"
+                  >
                     <Upload size={40} className="text-muted mx-auto mb-4" />
-                    <p className="text-white mb-2">Drag and drop CSV file here</p>
+                    <p className="text-white mb-2">
+                      {uploadedFile ? `Selected: ${uploadedFile}` : 'Drag and drop CSV file here'}
+                    </p>
                     <p className="text-sm text-muted">or click to browse</p>
+                    {uploadedFile && (
+                      <div className="mt-4 flex items-center justify-center gap-2 text-accent">
+                        <FileText size={16} />
+                        <span className="text-sm">{uploadedFile}</span>
+                      </div>
+                    )}
                   </div>
                   <button 
                     onClick={closeModal} 
-                    className="w-full py-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors text-white"
+                    className="w-full py-3 rounded-xl bg-accent text-primary font-semibold"
+                    disabled={!uploadedFile}
                   >
                     Import Leads
                   </button>

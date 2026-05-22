@@ -1,6 +1,6 @@
 'use client'
-import { useState } from 'react'
-import { FileText, Upload, Send, CheckCircle, Clock, Zap, X, Plus } from 'lucide-react'
+import { useState, useRef, DragEvent } from 'react'
+import { FileText, Upload, Send, CheckCircle, Clock, Zap, X, Plus, File } from 'lucide-react'
 import { clsx } from 'clsx'
 
 type ModalType = 'upload' | 'match' | 'create' | null
@@ -9,9 +9,32 @@ export function RFQ() {
   const [activeTab, setActiveTab] = useState<'rfqs' | 'vendors' | 'comparison'>('rfqs')
   const [activeModal, setActiveModal] = useState<ModalType>(null)
   const [vendorName, setVendorName] = useState('')
+  const [uploadedFile, setUploadedFile] = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const openModal = (type: ModalType) => setActiveModal(type)
   const closeModal = () => setActiveModal(null)
+
+  const handleDragOver = (e: DragEvent) => {
+    e.preventDefault()
+    e.currentTarget.classList.add('border-accent/50')
+  }
+
+  const handleDragLeave = (e: DragEvent) => {
+    e.currentTarget.classList.remove('border-accent/50')
+  }
+
+  const handleDrop = (e: DragEvent) => {
+    e.preventDefault()
+    e.currentTarget.classList.remove('border-accent/50')
+    const file = e.dataTransfer.files[0]
+    if (file) setUploadedFile(file.name)
+  }
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) setUploadedFile(file.name)
+  }
 
   return (
     <div className="p-4 md:p-8 space-y-6 md:space-y-8 animate-fade-in">
@@ -106,14 +129,36 @@ export function RFQ() {
             <div className="space-y-4">
               {activeModal === 'upload' && (
                 <>
-                  <div className="border-2 border-dashed border-white/20 rounded-xl p-8 text-center hover:border-accent/50 transition-colors cursor-pointer">
+                  <input 
+                    type="file" 
+                    ref={fileInputRef}
+                    onChange={handleFileSelect}
+                    className="hidden"
+                    accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
+                  />
+                  <div 
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDrop}
+                    onClick={() => fileInputRef.current?.click()}
+                    className="border-2 border-dashed border-white/20 rounded-xl p-8 text-center hover:border-accent/50 transition-colors cursor-pointer"
+                  >
                     <Upload size={40} className="text-muted mx-auto mb-4" />
-                    <p className="text-white mb-2">Drag and drop PO file here</p>
+                    <p className="text-white mb-2">
+                      {uploadedFile ? `Selected: ${uploadedFile}` : 'Drag and drop PO file here'}
+                    </p>
                     <p className="text-sm text-muted">PDF, DOC, or Image formats supported</p>
+                    {uploadedFile && (
+                      <div className="mt-4 flex items-center justify-center gap-2 text-accent">
+                        <File size={16} />
+                        <span className="text-sm">{uploadedFile}</span>
+                      </div>
+                    )}
                   </div>
                   <button 
                     onClick={closeModal} 
                     className="w-full py-3 rounded-xl bg-accent text-primary font-semibold"
+                    disabled={!uploadedFile}
                   >
                     Process PO
                   </button>
@@ -125,7 +170,7 @@ export function RFQ() {
                   <div>
                     <label className="text-sm text-muted mb-1 block">RFQ Description</label>
                     <textarea 
-                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:border-accent outline-none resize-none" 
+                      className="w-full px-4 py-3 rounded-xl bg-surface border border-white/10 text-white focus:border-accent outline-none resize-none" 
                       rows={4}
                       placeholder="Describe your requirements..."
                     />
@@ -133,9 +178,18 @@ export function RFQ() {
                   <div>
                     <label className="text-sm text-muted mb-1 block">Budget Range</label>
                     <div className="flex gap-2">
-                      <input type="number" className="w-1/2 px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:border-accent outline-none" placeholder="Min" />
-                      <input type="number" className="w-1/2 px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:border-accent outline-none" placeholder="Max" />
+                      <input type="number" className="w-1/2 px-4 py-3 rounded-xl bg-surface border border-white/10 text-white focus:border-accent outline-none" placeholder="Min" />
+                      <input type="number" className="w-1/2 px-4 py-3 rounded-xl bg-surface border border-white/10 text-white focus:border-accent outline-none" placeholder="Max" />
                     </div>
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted mb-1 block">Priority</label>
+                    <select className="w-full px-4 py-3 rounded-xl bg-surface border border-white/10 text-white focus:border-accent outline-none appearance-none cursor-pointer">
+                      <option value="low" className="bg-surface">Low</option>
+                      <option value="normal" className="bg-surface">Normal</option>
+                      <option value="high" className="bg-surface">High</option>
+                      <option value="urgent" className="bg-surface">Urgent</option>
+                    </select>
                   </div>
                   <button 
                     onClick={closeModal} 
@@ -153,7 +207,7 @@ export function RFQ() {
                       type="text" 
                       value={vendorName}
                       onChange={(e) => setVendorName(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:border-accent outline-none" 
+                      className="w-full px-4 py-3 rounded-xl bg-surface border border-white/10 text-white focus:border-accent outline-none" 
                       placeholder="Enter vendor name" 
                     />
                   </div>

@@ -193,11 +193,11 @@ export function Settings() {
                 <>
                   <div>
                     <label className="text-sm text-muted mb-1 block">API Key</label>
-                    <input type="password" className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:border-accent outline-none" placeholder="Enter API key" />
+                    <input type="password" className="w-full px-4 py-3 rounded-xl bg-surface border border-white/10 text-white focus:border-accent outline-none" placeholder="Enter API key" />
                   </div>
                   <div>
                     <label className="text-sm text-muted mb-1 block">Webhook URL (optional)</label>
-                    <input type="url" className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:border-accent outline-none" placeholder="https://..." />
+                    <input type="url" className="w-full px-4 py-3 rounded-xl bg-surface border border-white/10 text-white focus:border-accent outline-none" placeholder="https://..." />
                   </div>
                   <button onClick={closeModal} className="w-full py-3 rounded-xl bg-accent text-primary font-semibold flex items-center justify-center gap-2">
                     <Check size={18} />
@@ -209,15 +209,15 @@ export function Settings() {
                 <>
                   <div>
                     <label className="text-sm text-muted mb-1 block">Email Address</label>
-                    <input type="email" className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:border-accent outline-none" placeholder="user@company.com" />
+                    <input type="email" className="w-full px-4 py-3 rounded-xl bg-surface border border-white/10 text-white focus:border-accent outline-none" placeholder="user@company.com" />
                   </div>
                   <div>
                     <label className="text-sm text-muted mb-1 block">Role</label>
-                    <select className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:border-accent outline-none">
-                      <option value="admin">Admin</option>
-                      <option value="manager">Manager</option>
-                      <option value="user">User</option>
-                      <option value="viewer">Viewer</option>
+                    <select className="w-full px-4 py-3 rounded-xl bg-surface border border-white/10 text-white focus:border-accent outline-none appearance-none cursor-pointer">
+                      <option value="admin" className="bg-surface">Admin</option>
+                      <option value="manager" className="bg-surface">Manager</option>
+                      <option value="user" className="bg-surface">User</option>
+                      <option value="viewer" className="bg-surface">Viewer</option>
                     </select>
                   </div>
                   <button onClick={closeModal} className="w-full py-3 rounded-xl bg-accent text-primary font-semibold flex items-center justify-center gap-2">
@@ -230,11 +230,11 @@ export function Settings() {
                 <>
                   <div>
                     <label className="text-sm text-muted mb-1 block">Service Name</label>
-                    <input type="text" className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:border-accent outline-none" placeholder="e.g., Claude API" />
+                    <input type="text" className="w-full px-4 py-3 rounded-xl bg-surface border border-white/10 text-white focus:border-accent outline-none" placeholder="e.g., Claude API" />
                   </div>
                   <div>
                     <label className="text-sm text-muted mb-1 block">API Key</label>
-                    <input type="password" className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:border-accent outline-none" placeholder="sk-..." />
+                    <input type="password" className="w-full px-4 py-3 rounded-xl bg-surface border border-white/10 text-white focus:border-accent outline-none" placeholder="sk-..." />
                   </div>
                   <button onClick={closeModal} className="w-full py-3 rounded-xl bg-accent text-primary font-semibold flex items-center justify-center gap-2">
                     <Plus size={18} />
