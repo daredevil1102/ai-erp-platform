@@ -77,128 +77,140 @@ export function Dispatch() {
       </div>
 
       {/* Live Map */}
-      <div className="glass rounded-2xl p-6">
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-display font-semibold text-white">Live Fleet Map</h3>
-          <div className="flex items-center gap-4">
+      <div className="glass rounded-2xl p-4 md:p-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4 md:mb-6">
+          <h3 className="text-base md:text-lg font-display font-semibold text-white flex items-center gap-2">
+            <MapPin size={18} className="text-accent" />
+            Live Fleet Map
+          </h3>
+          <div className="hidden sm:flex items-center gap-4 flex-wrap">
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-accent" />
-              <span className="text-sm text-muted">In Transit</span>
+              <span className="text-xs text-muted">In Transit</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-success" />
-              <span className="text-sm text-muted">Delivered</span>
+              <span className="text-xs text-muted">Delivered</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-highlight" />
-              <span className="text-sm text-muted">Delayed</span>
+              <span className="text-xs text-muted">Delayed</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-muted" />
-              <span className="text-sm text-muted">Idle</span>
+              <span className="text-xs text-muted">Idle</span>
             </div>
           </div>
         </div>
-        <div className="relative h-[300px] md:h-[400px] rounded-xl bg-gradient-to-br from-surface to-secondary overflow-hidden">
+        
+        {/* Map Container */}
+        <div className="relative h-[250px] sm:h-[300px] md:h-[350px] rounded-xl bg-gradient-to-br from-surface to-secondary overflow-hidden border border-white/10">
           {vehicles.length === 0 ? (
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center">
-                <Truck size={64} className="text-muted mx-auto mb-4" />
-                <p className="text-muted">Add vehicles to see them on the map</p>
+                <Truck size={48} className="text-muted mx-auto mb-3" />
+                <p className="text-muted text-sm">Add vehicles to see them on the map</p>
               </div>
             </div>
           ) : (
             <div className="absolute inset-0 p-4">
-              {/* Map Grid */}
-              <svg className="w-full h-full opacity-20" viewBox="0 0 800 400" preserveAspectRatio="xMidYMid slice">
-                <path d="M50,200 Q200,100 400,200 T750,200" fill="none" stroke="#00D9FF" strokeWidth="3" strokeDasharray="8 4"/>
-                <path d="M50,250 Q200,150 400,250 T750,250" fill="none" stroke="#00D9FF" strokeWidth="2" strokeDasharray="8 4"/>
-                <path d="M50,300 Q200,200 400,300 T750,300" fill="none" stroke="#00D9FF" strokeWidth="2" strokeDasharray="8 4"/>
-                <path d="M100,50 L100,350" fill="none" stroke="#00D9FF" strokeWidth="1" strokeDasharray="4 4"/>
-                <path d="M250,50 L250,350" fill="none" stroke="#00D9FF" strokeWidth="1" strokeDasharray="4 4"/>
-                <path d="M400,50 L400,350" fill="none" stroke="#00D9FF" strokeWidth="1" strokeDasharray="4 4"/>
-                <path d="M550,50 L550,350" fill="none" stroke="#00D9FF" strokeWidth="1" strokeDasharray="4 4"/>
-                <path d="M700,50 L700,350" fill="none" stroke="#00D9FF" strokeWidth="1" strokeDasharray="4 4"/>
+              {/* Map Grid Lines */}
+              <svg className="w-full h-full opacity-15" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid slice">
+                <path d="M0,150 L800,150" fill="none" stroke="#00D9FF" strokeWidth="1"/>
+                <path d="M400,0 L400,300" fill="none" stroke="#00D9FF" strokeWidth="1"/>
+                <path d="M0,75 L800,75" fill="none" stroke="#00D9FF" strokeWidth="0.5" strokeDasharray="4 4"/>
+                <path d="M0,225 L800,225" fill="none" stroke="#00D9FF" strokeWidth="0.5" strokeDasharray="4 4"/>
               </svg>
               
-              {/* Location Markers */}
-              <div className="absolute top-8 left-8 flex items-center gap-1 text-accent">
-                <MapPin size={12} />
-                <span className="text-xs">Mumbai</span>
+              {/* Location Markers - Clearly Visible */}
+              <div className="absolute top-4 left-4 glass rounded-lg px-3 py-2 flex items-center gap-2 shadow-lg">
+                <MapPin size={14} className="text-accent" />
+                <span className="text-white text-xs font-medium">Mumbai</span>
               </div>
-              <div className="absolute top-8 right-8 flex items-center gap-1 text-accent">
-                <MapPin size={12} />
-                <span className="text-xs">Pune</span>
+              <div className="absolute top-4 right-4 glass rounded-lg px-3 py-2 flex items-center gap-2 shadow-lg">
+                <MapPin size={14} className="text-highlight" />
+                <span className="text-white text-xs font-medium">Pune</span>
               </div>
-              <div className="absolute bottom-8 left-8 flex items-center gap-1 text-accent">
-                <MapPin size={12} />
-                <span className="text-xs">Bangalore</span>
+              <div className="absolute bottom-4 left-4 glass rounded-lg px-3 py-2 flex items-center gap-2 shadow-lg">
+                <MapPin size={14} className="text-success" />
+                <span className="text-white text-xs font-medium">Bangalore</span>
               </div>
-              <div className="absolute bottom-8 right-8 flex items-center gap-1 text-accent">
-                <MapPin size={12} />
-                <span className="text-xs">Delhi</span>
+              <div className="absolute bottom-4 right-4 glass rounded-lg px-3 py-2 flex items-center gap-2 shadow-lg">
+                <MapPin size={14} className="text-warning" />
+                <span className="text-white text-xs font-medium">Delhi</span>
               </div>
               
               {/* Route Lines */}
               <svg className="absolute inset-0 w-full h-full pointer-events-none">
-                <path d="M120,200 Q250,120 400,200 T680,200" fill="none" stroke="#00D9FF" strokeWidth="2" opacity="0.4"/>
+                <path d="M100,150 Q250,80 400,150" fill="none" stroke="#00D9FF" strokeWidth="3" opacity="0.5"/>
+                <path d="M400,150 Q550,220 700,150" fill="none" stroke="#00D9FF" strokeWidth="3" opacity="0.5"/>
               </svg>
               
-              {/* Vehicles */}
+              {/* Vehicles with Position Labels */}
               {vehicles.slice(0, 6).map((v, i) => {
                 const positions = [
-                  { left: '15%', top: '45%' },
-                  { left: '35%', top: '30%' },
-                  { left: '55%', top: '50%' },
-                  { left: '75%', top: '35%' },
-                  { left: '25%', top: '65%' },
-                  { left: '65%', top: '60%' },
+                  { left: '12%', top: '40%' },
+                  { left: '30%', top: '25%' },
+                  { left: '50%', top: '55%' },
+                  { left: '68%', top: '30%' },
+                  { left: '25%', top: '70%' },
+                  { left: '60%', top: '65%' },
                 ]
                 const pos = positions[i % positions.length]
                 return (
                   <div
                     key={v.id}
-                    className="absolute transform -translate-x-1/2 -translate-y-1/2"
+                    className="absolute transform -translate-x-1/2 -translate-y-1/2 z-10"
                     style={{ left: pos.left, top: pos.top }}
                   >
                     <div className={clsx(
-                      'w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center shadow-lg',
+                      'w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center shadow-lg border-2 border-primary',
                       v.status === 'in_transit' && 'bg-accent',
                       v.status === 'delivered' && 'bg-success',
                       v.status === 'delayed' && 'bg-highlight',
                       v.status === 'idle' && 'bg-muted',
                     )}>
-                      <Truck size={18} className="text-primary" />
+                      <Truck size={16} className="text-primary" />
                     </div>
-                    <div className="mt-1 text-center">
-                      <span className="text-xs text-white bg-black/50 px-2 py-0.5 rounded">{v.driver.split(' ')[0]}</span>
+                    <div className="mt-2 text-center">
+                      <span className="text-[10px] text-white bg-black/60 px-2 py-0.5 rounded whitespace-nowrap">
+                        {v.driver.split(' ')[0]}
+                      </span>
                     </div>
                   </div>
                 )
               })}
               
-              {/* Vehicle Info Popup */}
-              <div className="absolute top-4 right-4 glass rounded-lg px-4 py-2 flex items-center gap-2">
-                <Navigation size={16} className="text-accent" />
-                <span className="text-sm text-muted">{vehicles.length} vehicles on route</span>
-              </div>
-              
-              {/* Legend */}
-              <div className="absolute bottom-4 left-4 glass rounded-lg p-3">
-                <p className="text-xs text-muted mb-2">Active Routes:</p>
+              {/* Legend Box */}
+              <div className="absolute top-4 right-16 hidden sm:block glass rounded-lg p-3 shadow-lg">
+                <p className="text-[10px] text-muted mb-2 uppercase tracking-wider">Routes</p>
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <div className="w-4 h-0.5 bg-accent" />
-                    <span className="text-xs text-muted">Mumbai-Pune</span>
+                    <div className="w-6 h-0.5 bg-accent" />
+                    <span className="text-[10px] text-white">Mumbai → Pune</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-4 h-0.5 bg-highlight" />
-                    <span className="text-xs text-muted">Pune-Bangalore</span>
+                    <div className="w-6 h-0.5 bg-success" />
+                    <span className="text-[10px] text-white">Pune → Bangalore</span>
                   </div>
                 </div>
               </div>
+              
+              {/* Vehicle Count Badge */}
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 glass rounded-full px-4 py-2 flex items-center gap-2 shadow-lg">
+                <Navigation size={14} className="text-accent" />
+                <span className="text-xs text-white font-medium">{vehicles.length} vehicles active</span>
+              </div>
             </div>
           )}
+          
+          {/* Mobile Legend */}
+          <div className="sm:hidden absolute top-4 right-4 glass rounded-lg p-2">
+            <div className="flex items-center gap-2 text-[10px] text-white">
+              <Navigation size={12} className="text-accent" />
+              <span>{vehicles.length} active</span>
+            </div>
+          </div>
         </div>
       </div>
 

@@ -403,33 +403,78 @@ export function RFQ() {
 
       {/* Comparison Tab */}
       {activeTab === 'comparison' && (
-        <div className="glass rounded-xl p-6">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
-            <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-              <GitCompare size={20} className="text-accent" />
+        <div className="glass rounded-xl p-4 md:p-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4 md:mb-6">
+            <h3 className="text-base md:text-lg font-semibold text-white flex items-center gap-2">
+              <GitCompare size={18} className="text-accent" />
               Vendor Comparison
             </h3>
             <button 
               onClick={generateComparison}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-accent text-primary text-sm"
+              className="flex items-center gap-2 px-3 py-2 rounded-xl bg-accent text-primary text-xs md:text-sm"
             >
-              <RefreshCw size={16} />
+              <RefreshCw size={14} />
               Generate New
             </button>
           </div>
           
-          <div className="overflow-x-auto -mx-6 px-6">
-            <table className="w-full min-w-[800px]">
+          {/* Mobile Card View - Shows on small screens */}
+          <div className="grid grid-cols-1 gap-4 md:hidden">
+            {vendors.map((vendor) => {
+              const match = Math.round((vendor.materials.length / 3) * 100)
+              return (
+                <div key={vendor.id} className="p-4 bg-white/5 rounded-xl">
+                  <div className="flex items-center justify-between mb-3">
+                    <div>
+                      <p className="text-white font-medium text-sm">{vendor.name}</p>
+                      <p className="text-muted text-xs">{vendor.location}</p>
+                    </div>
+                    <span className="text-accent text-sm">{vendor.rating}⭐</span>
+                  </div>
+                  <div className="space-y-2 text-xs">
+                    <div className="flex justify-between items-center">
+                      <span className="text-muted">Match:</span>
+                      <span className={clsx(
+                        'px-2 py-0.5 rounded-full text-xs',
+                        match >= 75 ? 'bg-success/20 text-success' : match >= 50 ? 'bg-warning/20 text-warning' : 'bg-muted/20 text-muted'
+                      )}>
+                        {match}%
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-muted">Price:</span>
+                      <span className="text-white">{vendor.priceRange}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-muted">Delivery:</span>
+                      <span className="text-white">{vendor.responseTime}</span>
+                    </div>
+                    <div className="flex justify-between items-center pt-2 border-t border-white/10">
+                      <span className="text-muted">Score:</span>
+                      <span className="text-accent font-bold text-base">{Math.round(vendor.rating * 20)}</span>
+                    </div>
+                  </div>
+                  <button className="w-full mt-3 px-3 py-2 rounded-lg bg-accent text-primary text-xs font-medium">
+                    Select Vendor
+                  </button>
+                </div>
+              )
+            })}
+          </div>
+          
+          {/* Desktop Table View - Hidden on small screens */}
+          <div className="hidden md:block overflow-x-auto -mx-6 px-6">
+            <table className="w-full min-w-[700px]">
               <thead>
                 <tr className="border-b border-white/10">
-                  <th className="text-left p-3 text-muted text-sm whitespace-nowrap">Vendor</th>
-                  <th className="text-center p-3 text-muted text-sm whitespace-nowrap hidden sm:table-cell">Location</th>
-                  <th className="text-center p-3 text-muted text-sm whitespace-nowrap">Rating</th>
-                  <th className="text-center p-3 text-muted text-sm whitespace-nowrap">Match %</th>
-                  <th className="text-center p-3 text-muted text-sm whitespace-nowrap hidden md:table-cell">Price</th>
-                  <th className="text-center p-3 text-muted text-sm whitespace-nowrap hidden lg:table-cell">Delivery</th>
-                  <th className="text-center p-3 text-muted text-sm whitespace-nowrap">Score</th>
-                  <th className="text-center p-3 text-muted text-sm whitespace-nowrap">Action</th>
+                  <th className="text-left p-3 text-muted text-xs">Vendor</th>
+                  <th className="text-center p-3 text-muted text-xs">Location</th>
+                  <th className="text-center p-3 text-muted text-xs">Rating</th>
+                  <th className="text-center p-3 text-muted text-xs">Match %</th>
+                  <th className="text-center p-3 text-muted text-xs">Price</th>
+                  <th className="text-center p-3 text-muted text-xs">Delivery</th>
+                  <th className="text-center p-3 text-muted text-xs">Score</th>
+                  <th className="text-center p-3 text-muted text-xs">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -438,12 +483,11 @@ export function RFQ() {
                   return (
                     <tr key={vendor.id} className="border-b border-white/5 hover:bg-white/5">
                       <td className="p-3">
-                        <p className="text-white font-medium text-sm">{vendor.name}</p>
+                        <p className="text-white font-medium text-xs">{vendor.name}</p>
                         <p className="text-muted text-xs">{vendor.contact}</p>
-                        <p className="text-muted text-xs mt-1 sm:hidden">{vendor.location}</p>
                       </td>
-                      <td className="p-3 text-center text-sm text-muted hidden sm:table-cell">{vendor.location}</td>
-                      <td className="p-3 text-center text-sm text-accent">{vendor.rating}⭐</td>
+                      <td className="p-3 text-center text-xs text-muted">{vendor.location}</td>
+                      <td className="p-3 text-center text-xs text-accent">{vendor.rating}⭐</td>
                       <td className="p-3 text-center">
                         <span className={clsx(
                           'px-2 py-1 rounded-full text-xs',
@@ -452,10 +496,10 @@ export function RFQ() {
                           {match}%
                         </span>
                       </td>
-                      <td className="p-3 text-center text-sm text-white hidden md:table-cell">{vendor.priceRange}</td>
-                      <td className="p-3 text-center text-sm text-muted hidden lg:table-cell">{vendor.responseTime}</td>
+                      <td className="p-3 text-center text-xs text-white">{vendor.priceRange}</td>
+                      <td className="p-3 text-center text-xs text-muted">{vendor.responseTime}</td>
                       <td className="p-3 text-center">
-                        <span className="text-xl font-bold text-accent">{Math.round(vendor.rating * 20)}</span>
+                        <span className="text-lg font-bold text-accent">{Math.round(vendor.rating * 20)}</span>
                       </td>
                       <td className="p-3 text-center">
                         <button className="px-3 py-1 rounded-lg bg-accent text-primary text-xs">
