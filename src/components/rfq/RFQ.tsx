@@ -404,7 +404,7 @@ export function RFQ() {
       {/* Comparison Tab */}
       {activeTab === 'comparison' && (
         <div className="glass rounded-xl p-6">
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
             <h3 className="text-lg font-semibold text-white flex items-center gap-2">
               <GitCompare size={20} className="text-accent" />
               Vendor Comparison
@@ -418,18 +418,18 @@ export function RFQ() {
             </button>
           </div>
           
-          <div className="overflow-x-auto">
-            <table className="w-full">
+          <div className="overflow-x-auto -mx-6 px-6">
+            <table className="w-full min-w-[800px]">
               <thead>
                 <tr className="border-b border-white/10">
-                  <th className="text-left p-3 text-muted text-sm">Vendor</th>
-                  <th className="text-center p-3 text-muted text-sm">Location</th>
-                  <th className="text-center p-3 text-muted text-sm">Rating</th>
-                  <th className="text-center p-3 text-muted text-sm">Match %</th>
-                  <th className="text-center p-3 text-muted text-sm">Price</th>
-                  <th className="text-center p-3 text-muted text-sm">Delivery</th>
-                  <th className="text-center p-3 text-muted text-sm">Score</th>
-                  <th className="text-center p-3 text-muted text-sm">Action</th>
+                  <th className="text-left p-3 text-muted text-sm whitespace-nowrap">Vendor</th>
+                  <th className="text-center p-3 text-muted text-sm whitespace-nowrap hidden sm:table-cell">Location</th>
+                  <th className="text-center p-3 text-muted text-sm whitespace-nowrap">Rating</th>
+                  <th className="text-center p-3 text-muted text-sm whitespace-nowrap">Match %</th>
+                  <th className="text-center p-3 text-muted text-sm whitespace-nowrap hidden md:table-cell">Price</th>
+                  <th className="text-center p-3 text-muted text-sm whitespace-nowrap hidden lg:table-cell">Delivery</th>
+                  <th className="text-center p-3 text-muted text-sm whitespace-nowrap">Score</th>
+                  <th className="text-center p-3 text-muted text-sm whitespace-nowrap">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -440,8 +440,9 @@ export function RFQ() {
                       <td className="p-3">
                         <p className="text-white font-medium text-sm">{vendor.name}</p>
                         <p className="text-muted text-xs">{vendor.contact}</p>
+                        <p className="text-muted text-xs mt-1 sm:hidden">{vendor.location}</p>
                       </td>
-                      <td className="p-3 text-center text-sm text-muted">{vendor.location}</td>
+                      <td className="p-3 text-center text-sm text-muted hidden sm:table-cell">{vendor.location}</td>
                       <td className="p-3 text-center text-sm text-accent">{vendor.rating}⭐</td>
                       <td className="p-3 text-center">
                         <span className={clsx(
@@ -451,8 +452,8 @@ export function RFQ() {
                           {match}%
                         </span>
                       </td>
-                      <td className="p-3 text-center text-sm text-white">{vendor.priceRange}</td>
-                      <td className="p-3 text-center text-sm text-muted">{vendor.responseTime}</td>
+                      <td className="p-3 text-center text-sm text-white hidden md:table-cell">{vendor.priceRange}</td>
+                      <td className="p-3 text-center text-sm text-muted hidden lg:table-cell">{vendor.responseTime}</td>
                       <td className="p-3 text-center">
                         <span className="text-xl font-bold text-accent">{Math.round(vendor.rating * 20)}</span>
                       </td>
