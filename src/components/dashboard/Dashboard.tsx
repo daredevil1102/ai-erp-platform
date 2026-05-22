@@ -13,12 +13,14 @@ const emptyPieData = []
 type ModalType = 'notifications' | 'quote' | 'campaign' | 'shipment' | 'collection' | null
 
 export function Dashboard() {
-  const [time, setTime] = useState('')
+  const [time, setTime] = useState('--:--:--')
   const [activeModal, setActiveModal] = useState<ModalType>(null)
   const [notifications, setNotifications] = useState<{id: number; text: string; time: string; read: boolean}[]>([])
   const [hasNotification, setHasNotification] = useState(false)
+  const [mounted, setMounted] = useState(false)
   
   useEffect(() => {
+    setMounted(true)
     const update = () => setTime(new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }))
     update()
     const interval = setInterval(update, 1000)
