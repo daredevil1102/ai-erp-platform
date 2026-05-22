@@ -2,7 +2,7 @@
 import { useAppStore, Module } from '@/store/appStore'
 import { 
   LayoutDashboard, Target, ShoppingCart, Truck, Wallet, Users, 
-  Bot, Settings, ChevronLeft, ChevronRight, Zap
+  Bot, Settings, ChevronLeft, ChevronRight, Zap, Mail
 } from 'lucide-react'
 import { clsx } from 'clsx'
 
@@ -14,6 +14,7 @@ const modules: { id: Module; label: string; icon: React.ReactNode }[] = [
   { id: 'dispatch', label: 'Dispatch & Tracking', icon: <Truck size={20} /> },
   { id: 'finance', label: 'Finance & Collections', icon: <Wallet size={20} /> },
   { id: 'hr', label: 'HR & Payroll', icon: <Users size={20} /> },
+  { id: 'automation', label: 'Automation', icon: <Mail size={20} /> },
   { id: 'agents', label: 'AI Agents', icon: <Bot size={20} /> },
   { id: 'settings', label: 'Settings', icon: <Settings size={20} /> },
 ]

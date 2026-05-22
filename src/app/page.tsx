@@ -11,6 +11,7 @@ import { Finance } from '@/components/finance/Finance'
 import { HR } from '@/components/hr/HR'
 import { Agents } from '@/components/agents/Agents'
 import { Settings } from '@/components/settings/Settings'
+import { EmailIntegration } from '@/components/automation/EmailIntegration'
 
 export default function Home() {
   const { currentModule, sidebarOpen } = useAppStore()
@@ -24,6 +25,7 @@ export default function Home() {
       case 'dispatch': return <Dispatch />
       case 'finance': return <Finance />
       case 'hr': return <HR />
+      case 'automation': return <EmailIntegration />
       case 'agents': return <Agents />
       case 'settings': return <Settings />
       default: return <Dashboard />

@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-export type Module = 'dashboard' | 'marketing' | 'sales' | 'rfq' | 'dispatch' | 'finance' | 'hr' | 'agents' | 'settings'
+export type Module = 'dashboard' | 'marketing' | 'sales' | 'rfq' | 'dispatch' | 'finance' | 'hr' | 'agents' | 'automation' | 'settings'
 
 // Marketing Types
 export interface Lead {
@@ -100,6 +100,27 @@ export interface NotificationPref {
   enabled: boolean
 }
 
+// Email Order Types
+export interface EmailOrder {
+  id: string
+  subject: string
+  from: string
+  body: string
+  timestamp: string
+  status: 'pending' | 'imported' | 'processed'
+}
+
+export interface ImportedOrder {
+  id: string
+  customerEmail: string
+  customerName: string
+  items: { sku: string; name: string; quantity: number; price: number }[]
+  total: number
+  status: 'pending' | 'processing' | 'completed' | 'failed'
+  createdAt: string
+  source: 'email' | 'manual' | 'api'
+}
+
 interface AppState {
   // Navigation
   currentModule: Module
@@ -165,6 +186,17 @@ interface AppState {
   // AI Agents
   activeAgentFilter: string
   setAgentFilter: (filter: string) => void
+  
+  // Automation - Email Orders
+  emailOrders: EmailOrder[]
+  importedOrders: ImportedOrder[]
+  autoImportEnabled: boolean
+  lastEmailSync: string | null
+  addEmailOrder: (order: EmailOrder) => void
+  importEmailOrder: (orderId: string) => void
+  processOrder: (orderId: string) => void
+  toggleAutoImport: () => void
+  setLastEmailSync: (time: string) => void
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
@@ -268,4 +300,48 @@ export const useAppStore = create<AppState>((set, get) => ({
   // AI Agents
   activeAgentFilter: 'All',
   setAgentFilter: (filter) => set({ activeAgentFilter: filter }),
+  
+  // Automation - Email Orders
+  emailOrders: [],
+  importedOrders: [],
+  autoImportEnabled: true,
+  lastEmailSync: null,
+  addEmailOrder: (order) => set((state) => ({ emailOrders: [...state.emailOrders, order] })),
+  importEmailOrder: (orderId) => {
+    const { emailOrders, importedOrders, addToast } = get()
+    const order = emailOrders.find(o => o.id === orderId)
+    if (order) {
+      const imported: ImportedOrder = {
+        id: `ORD-${Date.now()}`,
+        customerEmail: order.from,
+        customerName: order.from.split('@')[0].replace(/[._]/g, ' '),
+        items: [],
+        total: 0,
+        status: 'pending',
+        createdAt: order.timestamp,
+        source: 'email'
+      }
+      set({
+        emailOrders: emailOrders.filter(o => o.id !== orderId),
+        importedOrders: [imported, ...importedOrders]
+      })
+      addToast('Order imported successfully', 'success')
+    }
+  },
+  processOrder: (orderId) => {
+    set((state) => ({
+      importedOrders: state.importedOrders.map(o => 
+        o.id === orderId ? { ...o, status: 'processing' } : o
+      )
+    }))
+    setTimeout(() => {
+      set((state) => ({
+        importedOrders: state.importedOrders.map(o => 
+          o.id === orderId ? { ...o, status: 'completed' } : o
+        )
+      }))
+    }, 2000)
+  },
+  toggleAutoImport: () => set((state) => ({ autoImportEnabled: !state.autoImportEnabled })),
+  setLastEmailSync: (time) => set({ lastEmailSync: time }),
 }))
