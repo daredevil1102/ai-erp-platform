@@ -11,7 +11,9 @@ export function Dispatch() {
   const [newVehicle, setNewVehicle] = useState({
     driver: '',
     vehicleNumber: '',
-    phone: ''
+    phone: '',
+    startLocation: '',
+    endLocation: ''
   })
 
   const handleAddVehicle = () => {
@@ -23,17 +25,25 @@ export function Dispatch() {
       addToast('Please enter vehicle number', 'error')
       return
     }
+    if (!newVehicle.startLocation.trim()) {
+      addToast('Please enter starting location', 'error')
+      return
+    }
+    if (!newVehicle.endLocation.trim()) {
+      addToast('Please enter destination', 'error')
+      return
+    }
     
     addVehicle({
       id: `VH-${Date.now()}`,
       driver: newVehicle.driver,
-      location: 'Depot - Ready to dispatch',
+      location: `${newVehicle.startLocation} → ${newVehicle.endLocation}`,
       eta: 'Pending',
       status: 'idle',
       progress: 0
     })
     
-    setNewVehicle({ driver: '', vehicleNumber: '', phone: '' })
+    setNewVehicle({ driver: '', vehicleNumber: '', phone: '', startLocation: '', endLocation: '' })
     setShowAddVehicle(false)
     addToast('Vehicle added successfully', 'success')
   }
@@ -325,6 +335,32 @@ export function Dispatch() {
                 placeholder="Enter phone number"
                 className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-muted focus:outline-none focus:border-accent"
               />
+            </div>
+            <div>
+              <label className="block text-sm text-muted mb-2">Starting Location *</label>
+              <div className="relative">
+                <MapPin size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted" />
+                <input
+                  type="text"
+                  value={newVehicle.startLocation}
+                  onChange={(e) => setNewVehicle({ ...newVehicle, startLocation: e.target.value })}
+                  placeholder="e.g. Mumbai Warehouse"
+                  className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-muted focus:outline-none focus:border-accent"
+                />
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm text-muted mb-2">Destination *</label>
+              <div className="relative">
+                <Navigation size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-accent" />
+                <input
+                  type="text"
+                  value={newVehicle.endLocation}
+                  onChange={(e) => setNewVehicle({ ...newVehicle, endLocation: e.target.value })}
+                  placeholder="e.g. Pune Factory"
+                  className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-muted focus:outline-none focus:border-accent"
+                />
+              </div>
             </div>
             <div className="flex gap-3 pt-4">
               <button 

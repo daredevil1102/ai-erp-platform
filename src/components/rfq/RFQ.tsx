@@ -129,6 +129,7 @@ export function RFQ() {
   const [selectedVendor, setSelectedVendor] = useState<Vendor | null>(null)
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
   const [rfqs, setRfqs] = useState<{id: string; vendor: string; status: string; items: string[]}[]>([])
+  const [selectedVendorForRFQ, setSelectedVendorForRFQ] = useState<Vendor | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const openModal = (type: ModalType, vendor?: Vendor) => {
@@ -138,6 +139,28 @@ export function RFQ() {
   const closeModal = () => {
     setActiveModal(null)
     setSelectedVendor(null)
+    setSelectedVendorForRFQ(null)
+  }
+
+  // Handle vendor selection from comparison
+  const handleSelectVendor = (vendor: Vendor) => {
+    setSelectedVendorForRFQ(vendor)
+    setActiveModal('vendor')
+  }
+
+  // Create RFQ for selected vendor
+  const createVendorRFQ = () => {
+    if (!selectedVendorForRFQ) return
+    
+    const newRFQ = {
+      id: `RFQ-${Date.now()}-${selectedVendorForRFQ.id}`,
+      vendor: selectedVendorForRFQ.name,
+      status: 'created',
+      items: selectedVendorForRFQ.materials
+    }
+    setRfqs(prev => [newRFQ, ...prev])
+    closeModal()
+    setActiveTab('rfqs')
   }
 
   const handleDragOver = (e: DragEvent) => {
@@ -173,7 +196,7 @@ export function RFQ() {
       createdAt: new Date().toISOString()
     }
     setSelectedOrder(mockOrder)
-    setActiveModal('comparison')
+    setActiveTab('comparison')
   }
 
   // Match vendors to order
@@ -454,7 +477,7 @@ export function RFQ() {
                       <span className="text-accent font-bold text-base">{Math.round(vendor.rating * 20)}</span>
                     </div>
                   </div>
-                  <button className="w-full mt-3 px-3 py-2 rounded-lg bg-accent text-primary text-xs font-medium">
+                  <button onClick={() => handleSelectVendor(vendor)} className="w-full mt-3 px-3 py-2 rounded-lg bg-accent text-primary text-xs font-medium">
                     Select Vendor
                   </button>
                 </div>
@@ -502,7 +525,7 @@ export function RFQ() {
                         <span className="text-lg font-bold text-accent">{Math.round(vendor.rating * 20)}</span>
                       </td>
                       <td className="p-3 text-center">
-                        <button className="px-3 py-1 rounded-lg bg-accent text-primary text-xs">
+                        <button onClick={() => handleSelectVendor(vendor)} className="px-3 py-1 rounded-lg bg-accent text-primary text-xs">
                           Select
                         </button>
                       </td>
@@ -636,7 +659,7 @@ export function RFQ() {
                 </>
               )}
 
-              {activeModal === 'vendor' && selectedVendor && (
+              {activeModal === 'vendor' && selectedVendorForRFQ && (
                 <>
                   <div className="space-y-4">
                     <div className="p-4 bg-white/5 rounded-xl">
@@ -644,29 +667,40 @@ export function RFQ() {
                         <MapPin size={16} className="text-accent" />
                         <span className="text-muted text-sm">Location</span>
                       </div>
-                      <p className="text-white">{selectedVendor.location}</p>
+                      <p className="text-white">{selectedVendorForRFQ.location}</p>
                     </div>
                     <div className="p-4 bg-white/5 rounded-xl">
                       <div className="flex items-center gap-2 mb-3">
                         <Building size={16} className="text-warning" />
                         <span className="text-muted text-sm">Loading Point</span>
                       </div>
-                      <p className="text-white">{selectedVendor.loadingLocation}</p>
+                      <p className="text-white">{selectedVendorForRFQ.loadingLocation}</p>
                     </div>
                     <div className="p-4 bg-white/5 rounded-xl">
                       <div className="flex items-center gap-2 mb-3">
                         <Phone size={16} className="text-green-400" />
                         <span className="text-muted text-sm">Contact Details</span>
                       </div>
-                      <p className="text-white">{selectedVendor.contact}</p>
-                      <p className="text-accent">{selectedVendor.phone}</p>
+                      <p className="text-white">{selectedVendorForRFQ.contact}</p>
+                      <p className="text-accent">{selectedVendorForRFQ.phone}</p>
+                    </div>
+                    <div className="p-4 bg-white/5 rounded-xl">
+                      <p className="text-muted text-sm mb-2">Materials:</p>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedVendorForRFQ.materials.map((mat, i) => (
+                          <span key={i} className="px-2 py-1 rounded-lg bg-accent/20 text-accent text-xs">
+                            {mat}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   </div>
                   <button 
-                    onClick={closeModal}
-                    className="w-full py-3 rounded-xl bg-accent text-primary font-semibold"
+                    onClick={createVendorRFQ}
+                    className="w-full py-3 rounded-xl bg-accent text-primary font-semibold flex items-center justify-center gap-2"
                   >
-                    Create RFQ for Vendor
+                    <Send size={18} />
+                    Create RFQ for {selectedVendorForRFQ.name}
                   </button>
                 </>
               )}
