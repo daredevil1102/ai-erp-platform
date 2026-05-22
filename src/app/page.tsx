@@ -2,7 +2,6 @@
 import { useAppStore } from '@/store/appStore'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { Toast } from '@/components/common/Toast'
-import { FloatingWidget } from '@/components/common/FloatingWidget'
 import { Dashboard } from '@/components/dashboard/Dashboard'
 import { Marketing } from '@/components/marketing/Marketing'
 import { Sales } from '@/components/sales/Sales'
@@ -38,7 +37,6 @@ export default function Home() {
         {renderModule()}
       </main>
       <Toast />
-      <FloatingWidget />
     </div>
   )
 }
