@@ -13,7 +13,7 @@ const agentModules = [
   { module: 'RFQ', count: 4, icon: Zap, agents: ['OCRProcessor', 'VendorMatcher', 'PriceComparator', 'QuoteGenerator'] },
   { module: 'Dispatch', count: 2, icon: Truck, agents: ['RouteOptimizer', 'DeliveryTracker'] },
   { module: 'Finance', count: 3, icon: Wallet, agents: ['InvoiceParser', 'PaymentTracker', 'CollectionAgent'] },
-  { module: 'HR', count: 2, icon: Users, agents: ['ResumeParser', 'InterviewScheduler'] },
+  { module: 'HR', count: 1, icon: Users, agents: ['InterviewScheduler'] },
 ]
 
 const quickAgents = [
@@ -22,7 +22,7 @@ const quickAgents = [
   { name: 'VendorMatcher', module: 'RFQ', icon: Zap, desc: 'Match RFQ to vendors' },
   { name: 'DeliveryTracker', module: 'Dispatch', icon: Truck, desc: 'Track all deliveries' },
   { name: 'InvoiceParser', module: 'Finance', icon: Wallet, desc: 'Parse invoices automatically' },
-  { name: 'ResumeParser', module: 'HR', icon: Users, desc: 'Score resumes with AI' },
+  { name: 'InterviewScheduler', module: 'HR', icon: Users, desc: 'Schedule interviews with AI' },
 ]
 
 export function Agents() {
